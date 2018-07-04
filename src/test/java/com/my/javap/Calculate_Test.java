@@ -1,7 +1,6 @@
 package com.my.javap;
 
 import org.junit.Test;
-import org.junit.*;
 
 public class Calculate_Test {
 
