@@ -14,7 +14,7 @@
 		<!-- Jacoco and Sonar config properties -->
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<jacoco.version>0.7.2.201409121644</jacoco.version>
+		<jacoco.version>0.7.6.201602180812</jacoco.version>
 		<sonar-jacoco-listeners.version>1.4</sonar-jacoco-listeners.version>
 
 		<jacoco.outputDir>${basedir}/target/</jacoco.outputDir>
@@ -23,9 +23,18 @@
 
 		<sonar.jacoco.reportPath>${jacoco.outputDir}/${jacoco.out.ut.file}</sonar.jacoco.reportPath>
 		<sonar.jacoco.itReportPath>${jacoco.outputDir}/${jacoco.out.it.file}</sonar.jacoco.itReportPath>
-
+		
+		<!-- Test -->
+		<junit.version>4.11</junit.version>
+		
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.codehaus.sonar-plugins.java</groupId>
 			<artifactId>sonar-jacoco-listeners</artifactId>
@@ -41,89 +50,29 @@
 	</dependencies>
 	<build>
 		<plugins>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.19.1</version>
-				<configuration>
-					<argLine>${jacoco.agent.ut.arg} -Xms512m -Xmx1024m</argLine>
-					<skipTests>false</skipTests>
-					<properties>
-						<property>
-							<name>listener</name>
-							<value>org.sonar.java.jacoco.JUnitListener</value>
-						</property>
-					</properties>
-					<reportsDirectory>${jacoco.outputDir}/surefire-reports</reportsDirectory>
-				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>${jacoco.version}</version>
-				<executions>
-					<execution>
-						<id>prepare-ut-agent</id>
-						<phase>process-test-classes</phase>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-						<configuration>
-							<destFile>${sonar.jacoco.reportPath}</destFile>
-							<propertyName>jacoco.agent.ut.arg</propertyName>
-							<append>true</append>
-						</configuration>
-					</execution>
-					<execution>
-						<id>prepare-it-agent</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>prepare-agent-integration</goal>
-						</goals>
-						<configuration>
-							<destFile>${sonar.jacoco.itReportPath}</destFile>
-							<propertyName>jacoco.agent.it.arg</propertyName>
-							<append>true</append>
-						</configuration>
-					</execution>
-					<execution>
-						<id>default-report</id>
-						<phase>package</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-						<configuration>
-							<dataFile>${sonar.jacoco.reportPath}</dataFile>
-						</configuration>
-					</execution>
-					<execution>
-						<id>integration-report</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>report-integration</goal>
-						</goals>
-						<configuration>
-							<dataFile>${sonar.jacoco.itReportPath}</dataFile>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>2.19.1</version>
 				<configuration>
-					<argLine>-Xms512m -Xmx1024m ${jacoco.agent.it.arg}</argLine>
-					<properties>
-						<property>
-							<name>listener</name>
-							<value>org.sonar.java.jacoco.JUnitListener</value>
-						</property>
-					</properties>
-					<reportsDirectory>${jacoco.outputDir}/surefire-reports</reportsDirectory>
+					<!-- property set by jacoco-maven-plugin -->
+					<argLine>${itCoverageAgent}</argLine>
+					<groups>int</groups>
+					<!-- by default only IT*, *IT and *ITCase classes are included -->
+					<includes>
+						<include>**/*.java</include>
+					</includes>
 				</configuration>
 				<executions>
 					<execution>
+						<id>integration-test</id>
 						<goals>
 							<goal>integration-test</goal>
 							<goal>verify</goal>
@@ -131,6 +80,37 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.6.201602180812</version>
+				<executions>
+					<!-- prepare agent for measuring unit tests -->
+					<execution>
+						<id>prepare-unit-tests</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<configuration>
+							<destFile>${sonar.jacoco.reportPath}</destFile>
+						</configuration>
+					</execution>
+
+					<!-- prepare agent for measuring integration tests -->
+					<execution>
+						<id>prepare-integration-tests</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+						<phase>pre-integration-test</phase>
+						<configuration>
+							<destFile>${sonar.jacoco.itReportPath}</destFile>
+							<propertyName>itCoverageAgent</propertyName>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 </project>
