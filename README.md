@@ -9,3 +9,6 @@ jenkins(docker) : 2.60.3
 sonarqube(docker) : 7.1.0.11001
 gitlab(docker) : 10.6.4
 coverage plugin : jacoco
+
+
+https://blog.editor.naver.com/editor?docId=221313023660
