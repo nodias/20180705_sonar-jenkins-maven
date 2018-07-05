@@ -19,10 +19,8 @@
 
 		<jacoco.outputDir>${basedir}/target/</jacoco.outputDir>
 		<jacoco.out.ut.file>jacoco-ut.exec</jacoco.out.ut.file>
-		<jacoco.out.it.file>jacoco-it.exec</jacoco.out.it.file>
 
 		<sonar.jacoco.reportPath>${jacoco.outputDir}/${jacoco.out.ut.file}</sonar.jacoco.reportPath>
-		<sonar.jacoco.itReportPath>${jacoco.outputDir}/${jacoco.out.it.file}</sonar.jacoco.itReportPath>
 
 	</properties>
 	<dependencies>
