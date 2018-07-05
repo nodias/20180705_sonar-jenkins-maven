@@ -100,29 +100,7 @@
 					<reportsDirectory>${jacoco.outputDir}/surefire-reports</reportsDirectory>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.19.1</version>
-				<configuration>
-					<argLine>-Xms512m -Xmx1024m ${jacoco.agent.it.arg}</argLine>
-					<properties>
-						<property>
-							<name>listener</name>
-							<value>org.sonar.java.jacoco.JUnitListener</value>
-						</property>
-					</properties>
-					<reportsDirectory>${jacoco.outputDir}/surefire-reports</reportsDirectory>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>integration-test</goal>
-							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+			
 		</plugins>
 	</build>
 </project>
