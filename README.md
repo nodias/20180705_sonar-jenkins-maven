@@ -1,5 +1,3 @@
-H사 QA2차 준비
-
 java unittest의 jenkins,sonarqube 연동 세팅, 테스트
 
 환경
