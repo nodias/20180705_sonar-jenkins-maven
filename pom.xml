@@ -25,7 +25,7 @@
 		<sonar.jacoco.itReportPath>${jacoco.outputDir}/${jacoco.out.it.file}</sonar.jacoco.itReportPath>
 		
 		<!-- Test -->
-		<junit.version>4.11</junit.version>
+		<junit.version>4.13.1</junit.version>
 		
 	</properties>
 	<dependencies>
